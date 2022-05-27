@@ -19,7 +19,7 @@ def make_chisquare(name):
 
 
 
-
+counted_data.loc["TOTAL", "A":"E"] = 0
     
 #Do a test on the sums
 
@@ -67,5 +67,23 @@ for index, row in counted_data.iterrows():
     
 
     
-
+#Save it
 counted_data.to_csv("./csv_maker/counted_data.csv", index=True)
+
+boolean_data = counted_data.copy()
+
+
+#Loop through the columns and find the statistically significant values
+for col_name, series in boolean_data.iteritems():
+
+    #If it's not a p-value column, cont
+    if col_name.find("p-value") == -1:
+        continue
+
+    #Loop over series
+    for index, value in series.iteritems():
+        if value <= 0.05:
+            boolean_data.loc[index, col_name] = True
+
+boolean_data.to_csv("./csv_maker/boolean_data.csv", index=True)
+print(True)
